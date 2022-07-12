@@ -1,0 +1,79 @@
+.post-edit {
+  padding: 0 120px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+
+  .wrapper {
+    display: flex;
+  }
+
+  .input-wrapper {
+    width: 100%;
+    color: #898989;
+    margin-bottom: 10px;
+
+    .input-name {
+      display: block;
+    }
+
+    .input {
+      display: block;
+      width: 100%;
+      border: none;
+      padding: 5px 10px;
+      font-size: 18px;
+      outline: none;
+      border-radius: 3px;
+
+      &::placeholder {
+        font-size: 14px;
+        color: #acacac;
+      }
+    }
+  }
+
+  .img-wrapper {
+    width: fit-content;
+    margin-right: 50px;
+  }
+
+  .image {
+    margin-bottom: 5px;
+  }
+
+  .mde {
+    :global {
+      .cm-s-easymde {
+        border: none;
+        font-size: 18px;
+      }
+      .editor-toolbar {
+        border: none;
+        background-color: #fff;
+      }
+    }
+  }
+
+  .btn {
+    background-color: #7d7d7d;
+    padding: 5px 40px;
+    height: 30px;
+    color: #fff;
+    width: fit-content;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: center;
+    border-radius: 3px;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .submit {
+    height: 40px;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+}

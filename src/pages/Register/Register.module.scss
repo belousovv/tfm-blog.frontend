@@ -1,0 +1,42 @@
+.register {
+  padding: 0 120px;
+
+  .form {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    padding: 30px 20px;
+
+    .title {
+      margin-bottom: 30px;
+    }
+
+    .input {
+      margin-bottom: 30px;
+      max-width: 300px;
+      width: 100%;
+      padding: 5px 10px;
+      font-size: 18px;
+      outline: none;
+      border: 1px solid #ccc;
+      transition: all 0.3s;
+      border-radius: 3px;
+
+      &::placeholder {
+        font-size: 16px;
+        color: #979696;
+      }
+
+      &:focus {
+        border: 1px solid #767676;
+      }
+    }
+    .error {
+      color: red;
+      margin-top: -20px;
+      margin-bottom: 30px;
+    }
+  }
+}

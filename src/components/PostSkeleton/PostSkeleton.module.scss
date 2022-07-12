@@ -1,0 +1,56 @@
+.skeleton {
+  display: flex;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 2px 1px #e7e7e7;
+  height: 180px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+  }
+
+  .wrapper {
+    padding-top: 15px;
+    margin-left: 15px;
+  }
+
+  .name {
+    height: 15px;
+    width: 80px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    width: 200px;
+    height: 20px;
+    background-color: #ccc;
+    margin-bottom: 10px;
+  }
+
+  .text {
+    width: 400px;
+    height: 15px;
+    background-color: #ccc;
+    margin-bottom: 10px;
+  }
+}
+
+.anim {
+  opacity: 0.7;
+  animation: skeleton-anim 1s linear infinite alternate;
+}
+
+@keyframes skeleton-anim {
+  0% {
+    background-color: #b6b6b6;
+  }
+  100% {
+    background-color: #e8e8e8;
+  }
+}

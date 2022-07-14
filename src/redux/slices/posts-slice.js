@@ -6,13 +6,29 @@ const initialState = {
   posts: {
     items: [],
     status: 'loading',
+    totalCount: 0,
   },
+  currentPage: 1,
+  pageSize: 5,
 }
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const data = await postsApi.fetchPosts()
-  return data
-})
+export const fetchPosts = createAsyncThunk(
+  'posts/fetchPosts',
+  async (page = 1, thunkApi) => {
+    const count = thunkApi.getState().posts.pageSize
+    const data = await postsApi.fetchPosts(page, count)
+    return data
+  }
+)
+
+export const fetchPostsByTag = createAsyncThunk(
+  'posts/fetchPostsByTag',
+  async ({ tag, page = 1 }, thunkApi) => {
+    const count = thunkApi.getState().posts.pageSize
+    const data = await postsApi.fetchPostsByTag({ tag, page, count })
+    return data
+  }
+)
 
 export const fetchOnePost = createAsyncThunk(
   'posts/fetchOnePost',
@@ -21,6 +37,11 @@ export const fetchOnePost = createAsyncThunk(
     return data
   }
 )
+
+export const addViews = createAsyncThunk('posts/addViews', async (postId) => {
+  const data = await postsApi.addViews(postId)
+  return data
+})
 
 export const fetchLike = createAsyncThunk(
   '/posts/fetchLike',
@@ -54,20 +75,57 @@ export const removePost = createAsyncThunk(
   }
 )
 
+export const updatePost = createAsyncThunk(
+  'posts/updatePost',
+  async (postData) => {
+    const status = await postsApi.updatePost(postData.id, postData.data)
+    return status
+  }
+)
+
+export const fetchChangePage = createAsyncThunk(
+  'posts/fetchChangePage',
+  async ({ page, tag }, thunkApi) => {
+    const dispatch = thunkApi.dispatch
+    dispatch(tag ? fetchPostsByTag({ tag, page }) : fetchPosts(page))
+    dispatch(changePage(page))
+  }
+)
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    changePage: (state, action) => {
+      state.currentPage = action.payload
+    },
+  },
   extraReducers: {
     [fetchPosts.pending]: (state) => {
       state.posts.items = []
+      state.posts.totalCount = 0
       state.posts.status = 'loading'
     },
     [fetchPosts.fulfilled]: (state, action) => {
-      state.posts.items = action.payload
+      state.posts.items = action.payload.posts
+      state.posts.totalCount = action.payload.totalCount
       state.posts.status = 'loaded'
     },
     [fetchPosts.rejected]: (state) => {
+      state.posts.status = 'error'
+    },
+
+    [fetchPostsByTag.pending]: (state) => {
+      state.posts.items = []
+      state.posts.totalCount = 0
+      state.posts.status = 'loading'
+    },
+    [fetchPostsByTag.fulfilled]: (state, action) => {
+      state.posts.items = action.payload.posts
+      state.posts.totalCount = action.payload.totalCount
+      state.posts.status = 'loaded'
+    },
+    [fetchPostsByTag.rejected]: (state) => {
       state.posts.status = 'error'
     },
 
@@ -97,7 +155,15 @@ const postsSlice = createSlice({
         (p) => p.post_id !== action.payload.post_id
       )
     },
+
+    [addViews.fulfilled]: (state, action) => {
+      state.posts.items.find(
+        (p) => p.post_id === action.payload.post_id
+      ).views = action.payload.views
+    },
   },
 })
+
+export const { changePage } = postsSlice.actions
 
 export default postsSlice.reducer

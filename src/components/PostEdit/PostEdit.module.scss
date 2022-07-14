@@ -6,6 +6,10 @@
 
   .wrapper {
     display: flex;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
   }
 
   .input-wrapper {
@@ -40,10 +44,19 @@
 
   .image {
     margin-bottom: 5px;
+    object-fit: contain;
+    max-height: 300px;
+    background-color: #fff;
+    border-radius: 3px;
   }
 
   .mde {
     :global {
+      .fullscreen,
+      .side-by-side,
+      .preview {
+        display: none;
+      }
       .cm-s-easymde {
         border: none;
         font-size: 18px;
@@ -71,9 +84,25 @@
     }
   }
 
+  .error {
+    display: block;
+    color: #ff0000;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+
   .submit {
     height: 40px;
-    margin-top: 10px;
     font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 860px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 600px) {
+    padding: 0;
   }
 }

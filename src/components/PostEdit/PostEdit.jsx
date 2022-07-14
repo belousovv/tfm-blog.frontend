@@ -1,23 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './PostEdit.module.scss'
 import { selectIsAuth } from '../../redux/slices/auth-selector'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import SimpleMdeReact from 'react-simplemde-editor'
 import 'easymde/dist/easymde.min.css'
 import instance from '../../api/api'
-import { createPost } from '../../redux/slices/posts-slice'
+import { createPost, updatePost } from '../../redux/slices/posts-slice'
 
 const PostEdit = () => {
   const fileRef = React.useRef(null)
-  const isAuth = useSelector(selectIsAuth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const isAuth = useSelector(selectIsAuth)
+  const { id } = useParams()
 
   const [title, setTitle] = React.useState('')
   const [text, setText] = React.useState('')
   const [imageUrl, setImageUrl] = React.useState(null)
   const [tags, setTags] = React.useState([''])
+
+  const [error, setError] = React.useState('')
+
+  useEffect(() => {
+    if (id) {
+      instance
+        .get(`/posts/${id}`)
+        .then(({ data }) => {
+          setTitle(data.title)
+          setText(data.text)
+          setImageUrl(data.image_url)
+          setTags(data.tags)
+        })
+        .catch(() => {
+          console.warn('ошибка при редактировании')
+        })
+    }
+  }, [id])
 
   const simpleMdeOptions = React.useMemo(
     () => ({
@@ -44,7 +63,27 @@ const PostEdit = () => {
       tags: tags.length === 1 && tags[0] === '' ? null : tags,
       imageUrl,
     }
-    dispatch(createPost(data)).then((res) => navigate('/'))
+
+    //Validate data
+    if (title.length < 5) {
+      setError('Заголовок должен содержать более 5 символов')
+      return
+    }
+    if (text.length < 10) {
+      setError('Сообщение должно содержать более 10 символов')
+      return
+    }
+
+    if (id) {
+      dispatch(
+        updatePost({
+          id,
+          data,
+        })
+      ).then(() => navigate('/'))
+    } else {
+      dispatch(createPost(data)).then(() => navigate('/'))
+    }
   }
 
   const onTextChange = React.useCallback((value) => {
@@ -60,7 +99,7 @@ const PostEdit = () => {
     try {
       const formData = new FormData()
       const file = e.target.files[0]
-      formData.append('image', file)
+      formData.append('image', file, `${new Date().toISOString()}-${file.name}`)
       const { data } = await instance.post('/uploads', formData, {
         headers: {
           'content-type': 'multipart/form-data',
@@ -77,7 +116,14 @@ const PostEdit = () => {
   }
 
   return (
-    <section className={styles['post-edit']}>
+    <div className={styles['post-edit']}>
+      <button
+        className={`${styles.btn} ${styles.submit}`}
+        onClick={submitHandler}
+      >
+        {id ? 'Обновить' : 'Создать'}
+      </button>
+      <span className={styles.error}>{error}</span>
       <div className={styles.wrapper}>
         <div className={`${styles['input-wrapper']} ${styles['img-wrapper']}`}>
           <span className={styles['input-name']}>Изображение:</span>
@@ -124,17 +170,11 @@ const PostEdit = () => {
         <input
           className={styles.input}
           placeholder='первый,второй,третий...'
-          value={tags.toString()}
+          value={tags ? tags.toString() : ''}
           onChange={onTagsChange}
         />
       </div>
-      <button
-        className={`${styles.btn} ${styles.submit}`}
-        onClick={submitHandler}
-      >
-        Создать
-      </button>
-    </section>
+    </div>
   )
 }
 

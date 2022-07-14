@@ -10,8 +10,9 @@ import Login from './pages/Login/Login'
 import { useDispatch } from 'react-redux'
 import { fetchAuthMe } from './redux/slices/auth-slice'
 import Register from './pages/Register/Register'
-import PostEdit from './pages/PostEdit/PostEdit'
 import Post from './pages/Post/Post'
+import EditPost from './pages/EditPost/EditPost'
+import CreatePost from './pages/CreatePost/CreatePost'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,9 +30,11 @@ const App = () => {
       <Content>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/tags/:tag' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/post-edit' element={<PostEdit />} />
+          <Route path='/post-edit' element={<CreatePost />} />
+          <Route path='/post-edit/:id' element={<EditPost />} />
           <Route path='/posts/:id' element={<Post />} />
         </Routes>
       </Content>

@@ -3,19 +3,14 @@
   border-radius: 5px;
   box-shadow: 1px 2px 1px #e7e7e7;
   margin-bottom: 20px;
-  position: relative;
-
-  .img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px 5px 0 0;
-  }
 
   .img-post {
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    max-height: 300px;
     border-radius: 5px 5px 0 0;
+    margin-bottom: 10px;
+    padding-top: 20px;
   }
 
   .wrapper {
@@ -26,28 +21,70 @@
   .content {
     width: 100%;
     margin-left: 15px;
-    padding: 15px 0 0;
+    padding: 5px 0 0;
     color: #989c9e;
   }
 
   .name {
-    margin-bottom: 20px;
     color: #000;
   }
 
   .title {
-    margin-bottom: 10px;
+    width: fit-content;
+    margin-bottom: 20px;
+    color: #000;
+    font-size: 24px;
+
+    @media (max-width: 600px) {
+      margin-left: -50px;
+      font-size: 18px;
+    }
+  }
+
+  .title-post {
+    text-align: center;
+    margin-bottom: 20px;
     color: #000;
     font-size: 28px;
+
+    @media (max-width: 600px) {
+      margin-left: -50px;
+      text-align: left;
+    }
   }
 
   .text {
+    display: block;
     margin-bottom: 20px;
+    line-height: 1.5rem;
+    color: #5f5f5f;
+
+    @media (max-width: 600px) {
+      margin-left: -50px;
+    }
+
+    img {
+      margin: 10px 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 10px 0;
+    }
   }
 
   .data-wrapper {
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      margin-left: -50px;
+    }
   }
 
   .tags-list {
@@ -56,6 +93,10 @@
 
     .tags-item + .tags-item {
       margin-left: 10px;
+    }
+
+    @media (max-width: 600px) {
+      margin-bottom: 20px;
     }
   }
 
@@ -74,35 +115,61 @@
   }
 
   .like-btn {
-    position: absolute;
-    bottom: 70px;
-    right: 20px;
     cursor: pointer;
 
     .like-icon {
       color: #ababab;
-      transition: all 0.3s;
+      transition: all 0.5s;
+
+      &:hover {
+        color: #cba6a0;
+      }
     }
 
     .like-icon-active {
       color: #cd5845;
+      &:hover {
+        color: #cd5845;
+      }
     }
   }
 
   .edit {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    margin-right: 60px;
 
     .pen {
-      margin-right: 20px;
+      margin-right: 40px;
       color: #537aad;
       cursor: pointer;
+
+      @media (max-width: 600px) {
+        margin-right: 20px;
+      }
     }
 
     .trash {
       color: #bd2c00;
       cursor: pointer;
     }
+
+    @media (max-width: 600px) {
+      margin-right: 30px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+  }
+
+  .name-buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  img {
+    max-width: 100%;
   }
 }

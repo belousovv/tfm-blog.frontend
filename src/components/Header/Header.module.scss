@@ -11,7 +11,8 @@
     align-items: center;
 
     .btn-wrapper {
-      margin-left: 60px;
+      margin-left: auto;
+      margin-right: 50px;
     }
 
     .user-panel {
@@ -41,5 +42,9 @@
     .auth + .auth {
       margin-left: 20px;
     }
+  }
+
+  .avatar-wrapper {
+    cursor: pointer;
   }
 }

@@ -1,8 +1,14 @@
 import React from 'react'
+import cn from 'classnames'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useDispatch } from 'react-redux'
+import { NavLink, useNavigate } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
 import styles from './PostItem.module.scss'
 import Avatar from '../Avatar/Avatar'
 import PostSkeleton from '../PostSkeleton/PostSkeleton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import defaultAvatar from '../../images/default-avatar.jpg'
+import dateFilter from '../../utils/date-filter'
 import {
   faEye,
   faHeart,
@@ -10,18 +16,14 @@ import {
   faPen,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import cn from 'classnames'
-import defaultAvatar from '../../images/default-avatar.jpg'
-import dateFilter from '../../utils/date-filter'
-import { useDispatch } from 'react-redux'
 import {
   fetchLike,
   fetchUnlike,
   removePost,
 } from '../../redux/slices/posts-slice'
-import { NavLink } from 'react-router-dom'
 
 const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const iconClass = cn(
     styles['like-icon'],
@@ -37,7 +39,18 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
   }
 
   const removePostHandler = (id) => {
-    dispatch(removePost(id))
+    if (window.confirm('Вы действительно хотите удалить пост?')) {
+      if (isPage) {
+        dispatch(removePost(id))
+        navigate('/')
+      } else {
+        dispatch(removePost(id))
+      }
+    }
+  }
+
+  const editPostHandler = () => {
+    navigate(`/post-edit/${post.post_id}`)
   }
 
   if (isLoading) {
@@ -46,35 +59,71 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
 
   return (
     <div className={styles['post-item']}>
-      {post.image_url && (
+      {post.image_url && isPage && (
         <img
-          className={isPage ? styles['img-post'] : styles.img}
+          className={styles['img-post']}
           src={`http://localhost:4444/${post.image_url}`}
           alt='картинка к посту'
         />
       )}
       <div className={styles.wrapper}>
-        <Avatar image={post.avatar_url || defaultAvatar} />
+        <Avatar
+          image={
+            post.avatar_url
+              ? `http://localhost:4444/${post.avatar_url}`
+              : defaultAvatar
+          }
+        />
         <div className={styles.content}>
-          <h4 className={styles.name}>{post.name}</h4>
+          <div className={styles['name-buttons-wrapper']}>
+            <h4 className={styles.name}>{post.name}</h4>
+            <div className={styles.buttons}>
+              {isOwner && (
+                <div className={styles.edit}>
+                  <FontAwesomeIcon
+                    className={styles.pen}
+                    icon={faPen}
+                    onClick={editPostHandler}
+                  />
+                  <FontAwesomeIcon
+                    className={styles.trash}
+                    icon={faTrash}
+                    onClick={() => removePostHandler(post.post_id)}
+                  />
+                </div>
+              )}
+              <div
+                className={styles['like-btn']}
+                onClick={isLiked ? removeLikeHandler : addLikeHandler}
+              >
+                <FontAwesomeIcon
+                  className={iconClass}
+                  icon={faHeart}
+                  size='2x'
+                />
+              </div>
+            </div>
+          </div>
           <div>
-            <h2 className={styles.title}>
+            <h2 className={isPage ? styles['title-post'] : styles.title}>
               {isPage ? (
                 <>{post.title}</>
               ) : (
-                <NavLink to={`posts/${post.post_id}`}>{post.title}</NavLink>
+                <NavLink to={`/posts/${post.post_id}`}>{post.title}</NavLink>
               )}
             </h2>
-            <p className={styles.text}>
-              {isPage ? post.text : post.text.substring(0, 50) + '...'}
-            </p>
+            {isPage && (
+              <span className={styles.text}>
+                <ReactMarkdown>{post.text}</ReactMarkdown>
+              </span>
+            )}
             <div className={styles['data-wrapper']}>
               <ul className={styles['tags-list']}>
                 {post.tags.map((t, index) => (
                   <li key={index} className={styles['tags-item']}>
-                    <a className={styles['tags-link']} href={`tags/${t}`}>
+                    <NavLink className={styles['tags-link']} to={`/tags/${t}`}>
                       #{t}
-                    </a>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -98,23 +147,6 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
           </div>
         </div>
       </div>
-
-      <div
-        className={styles['like-btn']}
-        onClick={isLiked ? removeLikeHandler : addLikeHandler}
-      >
-        <FontAwesomeIcon className={iconClass} icon={faHeart} size='2x' />
-      </div>
-      {isOwner && (
-        <div className={styles.edit}>
-          <FontAwesomeIcon className={styles.pen} icon={faPen} />
-          <FontAwesomeIcon
-            className={styles.trash}
-            icon={faTrash}
-            onClick={() => removePostHandler(post.post_id)}
-          />
-        </div>
-      )}
     </div>
   )
 }

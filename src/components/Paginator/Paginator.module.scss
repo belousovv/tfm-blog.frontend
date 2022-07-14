@@ -1,0 +1,24 @@
+.paginator {
+  background-color: #fff;
+  color: #ccc;
+  width: fit-content;
+  font-size: 16px;
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 3px;
+
+  .page {
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  .active {
+    color: #000;
+  }
+}

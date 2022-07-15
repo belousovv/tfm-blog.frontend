@@ -151,7 +151,7 @@ const PostEdit = () => {
       {imageUrl && (
         <img
           className={styles.image}
-          src={`http://localhost:4444/${imageUrl}`}
+          src={`https://tfm-blog.herokuapp.com/${imageUrl}`}
           alt='картинка к посту'
         />
       )}

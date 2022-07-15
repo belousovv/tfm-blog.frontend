@@ -19,7 +19,7 @@ const Header = () => {
 
   useEffect(() => {
     if (user?.avatar_url) {
-      setAvatar('http://localhost:4444/' + user.avatar_url)
+      setAvatar('https://tfm-blog.herokuapp.com/' + user.avatar_url)
     }
   }, [user])
 
@@ -43,7 +43,7 @@ const Header = () => {
           'content-type': 'multipart/form-data',
         },
       })
-      setAvatar('http://localhost:4444/' + data.image_url)
+      setAvatar('https://tfm-blog.herokuapp.com/' + data.image_url)
     } catch (error) {
       console.warn(error)
     }

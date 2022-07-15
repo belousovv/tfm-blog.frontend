@@ -62,7 +62,7 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
       {post.image_url && isPage && (
         <img
           className={styles['img-post']}
-          src={`http://localhost:4444/${post.image_url}`}
+          src={`https://tfm-blog.herokuapp.com/${post.image_url}`}
           alt='картинка к посту'
         />
       )}
@@ -70,7 +70,7 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
         <Avatar
           image={
             post.avatar_url
-              ? `http://localhost:4444/${post.avatar_url}`
+              ? `https://tfm-blog.herokuapp.com/${post.avatar_url}`
               : defaultAvatar
           }
         />

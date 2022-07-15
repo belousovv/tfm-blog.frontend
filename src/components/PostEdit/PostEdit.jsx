@@ -151,7 +151,7 @@ const PostEdit = () => {
       {imageUrl && (
         <img
           className={styles.image}
-          src={`https://tfm-blog.herokuapp.com/${imageUrl}`}
+          src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
           alt='картинка к посту'
         />
       )}

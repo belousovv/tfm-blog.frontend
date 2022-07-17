@@ -19,7 +19,10 @@ const Header = () => {
 
   useEffect(() => {
     if (user?.avatar_url) {
-      setAvatar(process.env.REACT_APP_API_URL + user.avatar_url)
+      setAvatar(
+        (process.env.REACT_APP_API_URL || 'http://localhost:4444/') +
+          user.avatar_url
+      )
     }
   }, [user])
 
@@ -43,7 +46,10 @@ const Header = () => {
           'content-type': 'multipart/form-data',
         },
       })
-      setAvatar(process.env.REACT_APP_API_URL + data.image_url)
+      setAvatar(
+        (process.env.REACT_APP_API_URL || 'http://localhost:4444/') +
+          data.image_url
+      )
     } catch (error) {
       console.warn(error)
     }

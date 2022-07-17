@@ -11,6 +11,7 @@ import { selectAuthUser, selectIsAuth } from '../../redux/slices/auth-selector'
 import { useNavigate, useParams } from 'react-router-dom'
 import Paginator from '../../components/Paginator/Paginator'
 import Button from '../../components/Button/Button'
+import PostSkeleton from '../../components/PostSkeleton/PostSkeleton'
 
 const Home = () => {
   const posts = useSelector(selectPosts)
@@ -46,16 +47,18 @@ const Home = () => {
         />
       </div>
       <Paginator />
-      {posts.map((p) => (
-        <PostItem
-          key={p.post_id}
-          post={p}
-          isPage={false}
-          isLiked={p.likes.includes(user?.user_id)}
-          isLoading={postsStatus === 'loading'}
-          isOwner={user && user.user_id === p.user_id}
-        />
-      ))}
+      {posts
+        ? posts.map((p) => (
+            <PostItem
+              key={p.post_id}
+              post={p}
+              isPage={false}
+              isLiked={p.likes.includes(user?.user_id)}
+              isLoading={postsStatus === 'loading'}
+              isOwner={user && user.user_id === p.user_id}
+            />
+          ))
+        : [...Array(3)].map(() => <PostSkeleton />)}
     </section>
   )
 }

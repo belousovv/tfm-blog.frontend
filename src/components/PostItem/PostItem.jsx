@@ -62,7 +62,9 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
       {post.image_url && isPage && (
         <img
           className={styles['img-post']}
-          src={`${process.env.REACT_APP_API_URL}${post.image_url}`}
+          src={`${process.env.REACT_APP_API_URL || 'http://localhost:4444/'}${
+            post.image_url
+          }`}
           alt='картинка к посту'
         />
       )}
@@ -70,7 +72,9 @@ const PostItem = ({ post, isLoading, isPage, isLiked, isOwner }) => {
         <Avatar
           image={
             post.avatar_url
-              ? `${process.env.REACT_APP_API_URL}${post.avatar_url}`
+              ? `${process.env.REACT_APP_API_URL || 'http://localhost:4444/'}${
+                  post.avatar_url
+                }`
               : defaultAvatar
           }
         />

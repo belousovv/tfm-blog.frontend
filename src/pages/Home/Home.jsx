@@ -47,7 +47,7 @@ const Home = () => {
         />
       </div>
       <Paginator />
-      {posts
+      {posts.length > 0
         ? posts.map((p) => (
             <PostItem
               key={p.post_id}
@@ -58,7 +58,7 @@ const Home = () => {
               isOwner={user && user.user_id === p.user_id}
             />
           ))
-        : [...Array(3)].map(() => <PostSkeleton />)}
+        : [...Array(2)].map(() => <PostSkeleton />)}
     </section>
   )
 }
